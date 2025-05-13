@@ -3,8 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton, useUser } from '@clerk/nextjs'
-import { Avatar, AvatarImage, AvatarFallback } from "@/frontend/components/ui/avatar";
-import { Skeleton } from "@/frontend/components/ui/skeleton";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
 import {   
   NavigationMenu,
   NavigationMenuContent,
@@ -12,7 +12,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from "@/frontend/components/ui/navigation-menu";
+} from "@/components/ui/navigation-menu";
 
 // Update the gradient class to have smooth animation
 const gradientClass = "bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 animate-gradient bg-[length:200%_100%]";

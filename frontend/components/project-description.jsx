@@ -3,7 +3,7 @@
 import { Zap, Shield, Cpu, Network } from 'lucide-react';
 import { Ticker } from './ticker';
 
-export function ProjectDescription() {
+function ProjectDescription() {
   return (
     <>
       {/* Project Description Gradient */}
@@ -53,4 +53,6 @@ export function ProjectDescription() {
       </section>
     </>
   );
-} 
+}
+
+export default ProjectDescription; 

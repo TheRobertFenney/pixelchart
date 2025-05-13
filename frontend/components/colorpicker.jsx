@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import iro from '@jaames/iro';
-import { Card, CardContent, CardHeader, CardTitle } from "@/frontend/components/ui/card";
-import { Label } from "@/frontend/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
 function ColorPickerSkeleton() {

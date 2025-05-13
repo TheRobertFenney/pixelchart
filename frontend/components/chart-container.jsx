@@ -1,12 +1,14 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
+import { useUser } from '@clerk/nextjs';
 import { CanvasChart } from "./canvas-chart";
 import { ColorPicker } from "./colorpicker";
-import { Button } from "@/frontend/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Eraser, Paintbrush } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import { AuthOverlay } from "./auth-overlay";
+import { useSpacetime } from '@/lib/hooks/useSpacetime.tsx';
 
 function ChartSkeleton() {
   return (
@@ -23,19 +25,11 @@ function ToolsSkeleton() {
   );
 }
 
-export function ChartContainer() {
+function ChartContainer() {
   const [selectedColor, setSelectedColor] = useState('#ffffff');
   const [currentTool, setCurrentTool] = useState('brush');
-  const [isLoading, setIsLoading] = useState(true);
-  const isSignedIn = false;
-
-  useEffect(() => {
-    // Simulate a small delay to prevent flash
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, []);
+  const { isSignedIn } = useUser();
+  const { client, isConnected, error, pixels } = useSpacetime();
 
   const handleColorChange = useCallback((color) => {
     setSelectedColor(color);
@@ -43,25 +37,37 @@ export function ChartContainer() {
   }, []);
 
   const handlePixelClick = useCallback((index, isErasing, shouldChangeTool) => {
-    if (!isSignedIn) return;
+    if (!isSignedIn || !client) return;
+    
     if (shouldChangeTool) {
       setCurrentTool(isErasing ? 'eraser' : 'brush');
     }
-  }, [isSignedIn]);
+
+    client.paint([index], isErasing ? undefined : selectedColor);
+  }, [isSignedIn, client, selectedColor]);
+
+  if (error) {
+    return (
+      <div className="text-red-500">
+        Error connecting to SpacetimeDB: {error}
+      </div>
+    );
+  }
 
   return (
     <div className="flex">
       <div className="flex gap-8 items-start relative">
-        {isLoading ? <ChartSkeleton /> : (
+        {!isConnected ? <ChartSkeleton /> : (
           <CanvasChart 
             onPixelClick={handlePixelClick} 
             selectedColor={selectedColor}
             currentTool={currentTool}
+            pixels={pixels}
           />
         )}
         <div className="flex flex-col gap-4">
           <ColorPicker onColorChange={handleColorChange} />
-          {isLoading ? <ToolsSkeleton /> : (
+          {!isConnected ? <ToolsSkeleton /> : (
             <div className="flex gap-2 justify-center">
               <Button
                 variant={currentTool === 'brush' ? 'default' : 'secondary'}
@@ -102,4 +108,6 @@ export function ChartContainer() {
       </div>
     </div>
   );
-} 
+}
+
+export default ChartContainer; 

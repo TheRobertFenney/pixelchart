@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useEffect, useCallback, useReducer } from 'react';
-import { Label } from "@/frontend/components/ui/label";
+import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
 const GRID_SIZE = 32;
@@ -85,7 +85,7 @@ function gridReducer(state, action) {
   }
 }
 
-export function CanvasChart({ onPixelClick, selectedColor, currentTool }) {
+export function CanvasChart({ onPixelClick, selectedColor, currentTool, pixels }) {
   const canvasRef = useRef(null);
   const gridPathRef = useRef(null);
   const rafRef = useRef(null);
@@ -301,6 +301,17 @@ export function CanvasChart({ onPixelClick, selectedColor, currentTool }) {
       document.removeEventListener('contextmenu', preventContextMenu);
     };
   }, [renderLoop, requestRender]);
+
+  // Update your rendering logic to use the pixels prop
+  useEffect(() => {
+    if (!pixels) return;
+    
+    // Update your canvas/grid with the pixels data
+    pixels.forEach((pixel) => {
+      // Assuming pixel.position is the index and pixel.color is the color
+      updatePixel(pixel.position, pixel.color);
+    });
+  }, [pixels]);
 
   return (
     <div className="flex flex-col items-center gap-4">

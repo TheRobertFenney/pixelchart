@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { ChartContainer } from "@/frontend/components/chart-container";
-import { ProjectDescription } from "@/frontend/components/project-description";
+import ChartContainer from "@/components/chart-container";
+import ProjectDescription from "@/components/project-description";
 
 export default function Home() {
   return (
